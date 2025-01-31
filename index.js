@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const PORT = 3000;
+const PORT = 4000;
 const Product = require("./Model/products")
 
 mongoose
@@ -12,8 +12,35 @@ mongoose
 
 app.use(express.json())
 
-app.get("/", (req,res)=>{
-    res.send("Hello World");
+app.get("/products", async(req,res)=>{
+    try {
+        const allProducts = await Product.find()
+        return res.status(200).json({
+            status: "success",
+            message: "Products retrieved",
+            data : allProducts
+        })
+    } catch (error) {
+        return res.status(500).json({
+            status: "error ",
+            message: "internal server error",
+            error
+        })
+    }
+})
+
+app.patch("/products/:id", async(req,res)=>{
+    const {id} = req.params;
+    const {name, productsID, description, image, price, feedback} = req.body
+    const products = await Product.findByIdAndUpdate(id, {
+        name, productsID, description, image, price, feedback
+    })
+
+    res.status(200).json({
+        status: "success",
+        message: "product updated successfully",
+        data: products
+    })
 })
 
 app.post("/products", async(req, res)=>{
@@ -40,6 +67,32 @@ app.post("/products", async(req, res)=>{
     return res.status(200).json({
         status: "success",
         message: "Product created successfully"
+    })
+})
+
+app.delete("/products/:id", async(req, res)=>{
+    const {id} = req.params;
+    await Product.findByIdAndDelete(id)    
+    res.status(200).json({
+        status: "success",
+        message: "Product deleted successfully"
+    })
+})
+
+app.get("/products/:id", async(req, res)=>{
+    const {id} = req.params;
+    const product = await Product.findById(id)
+    if(!product){
+        return res.status(400).json({
+            status: "failed",
+            message: "product not found"
+        })
+    }
+
+    res.status(200).json({
+        status: "successful",
+        message: "Product found successfully",
+        data: product
     })
 })
 
