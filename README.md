@@ -38,8 +38,23 @@ To get started, follow these steps:
 |:-------|:------------------|:--------------------------|
 | GET    | `/products`        | Retrieve all products     |
 | POST   | `/products`        | Add a new product          |
-| PUT    | `/products/:id`    | Update a specific product  |
+| PATCH  | `/products/:id`    | Update a specific product  |
 | DELETE | `/products/:id`    | Delete a specific product  |
+
+
+```plaintext
+productInventoryAPI/
+├── controllers/
+│   └── productController.js
+├── models/
+│   └── productModel.js
+├── routes/
+│   └── productRoutes.js
+├── app.js
+├── package.json
+└── README.md
+```
+
 
 
 ## Contributing
